@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- Background Rounded Card -->
+  <rect width="512" height="512" rx="112" fill="#090D16" />
+  
+  <!-- Outer Glow Border Frame -->
+  <rect x="32" y="32" width="448" height="448" rx="96" fill="none" stroke="#38BDF8" stroke-width="16" stroke-opacity="0.3" />
+
+  <!-- Minimalist 'T' with AI Spark -->
+  <path d="M140 156 H372 V216 H286 V356 H226 V216 H140 Z" fill="url(#cyanGradient)" />
+  
+  <!-- Glowing AI Spark dot -->
+  <circle cx="370" cy="142" r="28" fill="#F59E0B" />
+
+  <!-- Gradient Definitions -->
+  <defs>
+    <linearGradient id="cyanGradient" x1="140" y1="156" x2="372" y2="356" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#2563EB" />
+    </linearGradient>
+  </defs>
+</svg>
