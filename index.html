@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Curated Free AI Tools — Editorial Directory</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Inter & Newsreader Fonts for authentic Editorial SaaS aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Newsreader', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Smooth transition for category state and search stream filtering */
+    .tool-item {
+      transition: all 0.25s ease-in-out;
+    }
+    /* Hide scrollbar for category filter bar on mobile */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900 antialiased selection:bg-slate-900 selection:text-white min-h-screen flex flex-col justify-between">
+
+  <!-- Header / Minimal Sticky Brand Bar -->
+  <header class="border-b border-slate-100 sticky top-0 bg-white/90 backdrop-blur-md z-50">
+    <div class="max-w-6xl px-6 md:px-12 mx-auto h-16 flex items-center justify-between">
+      <a href="#" class="font-extrabold tracking-tight text-base sm:text-lg text-slate-900 hover:opacity-80 transition flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block animate-pulse"></span>
+        <span>Toolkit</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 text-xs font-mono text-slate-500 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-full">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span>Live Directory</span>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Editorial Content Stream -->
+  <main class="max-w-6xl px-6 md:px-12 mx-auto pt-8 sm:pt-12 md:pt-16 pb-24 w-full flex-grow">
+    
+    <!-- Hero Section (Gumloop Style Typography) -->
+    <header class="mb-10 sm:mb-14 text-left">
+      <div class="flex items-center gap-2 text-[11px] sm:text-xs font-mono text-slate-400 uppercase tracking-wider mb-3 sm:mb-4">
+        <span>Editorial Digest</span>
+        <span>•</span>
+        <span>Zero Cost Tiers</span>
+      </div>
+      
+      <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.15] sm:leading-[1.1] mb-4 sm:mb-6">
+        Stop paying for AI.<br class="hidden sm:block"/> Here are the tools that do it for free.
+      </h1>
+      
+      <p class="text-base sm:text-lg md:text-xl text-slate-600 font-serif italic leading-relaxed max-w-2xl">
+        Handpicked and rigorously tested software for college assignments, full-stack coding, visual design, and daily work automation. No paywalls, no credit card required.
+      </p>
+    </header>
+
+    <!-- Search & Filter Controls -->
+    <section class="mb-10 sm:mb-14 space-y-3 sm:space-y-4 sticky top-16 z-40 bg-white/95 pt-2 pb-3 backdrop-blur-sm border-b border-slate-100/60">
+      <!-- Search Input -->
+      <div class="relative">
+        <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input 
+          type="text" 
+          id="searchInput" 
+          oninput="handleSearch()" 
+          placeholder="Filter tools by keyword, prompt, or task..."
+          class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200/80 text-slate-900 text-sm focus:outline-none focus:border-slate-900 focus:bg-white transition shadow-sm placeholder:text-slate-400"
+        />
+      </div>
+      
+      <!-- Category Filter Pills (Scrollable on Mobile) -->
+      <div id="categoryFilters" class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 text-xs">
+        <!-- Generated Dynamically via JS -->
+      </div>
+    </section>
+
+    <!-- Editorial Stream List (Pure Vertical Stream — No Card Containers) -->
+    <section id="toolsStream" class="divide-y divide-slate-100 space-y-12 sm:space-y-16">
+      <!-- Dynamic Tool Stream Loaded by JS Engine -->
+    </section>
+
+    <!-- Empty Results State -->
+    <div id="emptyState" class="hidden text-center py-16 sm:py-20">
+      <p class="text-slate-400 text-base font-serif italic mb-3">No matching tools found for your query.</p>
+      <button onclick="resetFilters()" class="text-xs font-mono text-blue-600 hover:underline uppercase tracking-wider">Reset Search Filters</button>
+    </div>
+
+  </main>
+
+  <!-- Genuine SaaS Footer -->
+  <footer class="border-t border-slate-100 bg-slate-50/50 py-10 sm:py-12 text-xs text-slate-500 font-sans">
+    <div class="max-w-6xl px-6 md:px-12 mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="text-center sm:text-left space-y-1">
+        <p class="font-semibold text-slate-800">Toolkit</p>
+        <p class="text-slate-500 max-w-sm">Built for students, software engineers, and creators. Independent and human-curated directory.</p>
+      </div>
+      
+      <div class="flex flex-wrap justify-center sm:justify-end gap-x-6 gap-y-2 text-slate-600 font-medium">
+        <a href="mailto:submit@aitoolshub.com" class="hover:text-slate-900 transition">Submit a Tool</a>
+        <a href="#" onclick="alert('Privacy Policy: We do not track your personal data or search queries.'); return false;" class="hover:text-slate-900 transition">Privacy</a>
+        <a href="#" onclick="alert('Terms: All tool recommendations are provided free of charge for personal and commercial productivity.'); return false;" class="hover:text-slate-900 transition">Terms</a>
+        <a href="https://api.whatsapp.com/send?text=Hey,%20check%20out%20this%20free%20AI%20tools%20directory!" target="_blank" rel="noopener" class="hover:text-emerald-600 transition">Share Hub</a>
+      </div>
+    </div>
+    <div class="max-w-6xl px-6 md:px-12 mx-auto mt-8 pt-6 border-t border-slate-200/60 text-center sm:text-left text-[11px] text-slate-400 font-mono">
+      © 2026 AI Tools Directory. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- Fully Integrated Dynamic Data & Engine Script -->
+  <script>
+    // Master Array of 100 High-Utility Curated AI Tools across 10 Categories
+    const AI_TOOLS = [
+      // 1. CODING (10 Tools)
+      { id: 'v0-dev', name: 'v0.dev', category: 'coding', pricing: 'Generous Free Tier', url: 'https://v0.dev', description: 'Generates production-ready React and Tailwind UI components directly from natural language prompts.', fallbackImg: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'claude-ai', name: 'Claude', category: 'coding', pricing: 'Free Access', url: 'https://claude.ai', description: 'Advanced AI assistant built for deep logic, complex coding, repository debugging, and structured technical writing.', fallbackImg: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'cursor-editor', name: 'Cursor', category: 'coding', pricing: 'Free Tier', url: 'https://www.cursor.com', description: 'An AI-native code editor fork of VS Code. Predicts multi-line edits, answers repo questions, and writes code fast.', fallbackImg: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'bolt-new', name: 'Bolt.new', category: 'coding', pricing: 'Free Tier', url: 'https://bolt.new', description: 'Prompt, build, and deploy full-stack Node & Web container applications directly in your browser.', fallbackImg: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'blackbox-ai', name: 'Blackbox AI', category: 'coding', pricing: 'Free Tier', url: 'https://www.blackbox.ai', description: 'Real-time AI code autocomplete, code search, and video-to-code extraction for over 20 programming languages.', fallbackImg: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'coderabbit', name: 'CodeRabbit', category: 'coding', pricing: 'Free for Open Source', url: 'https://coderabbit.ai', description: 'Automated AI peer code reviewer that provides line-by-line feedback on pull requests before merging.', fallbackImg: 'https://images.unsplash.com/photo-1556075798-4825dfaaf498?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'tabnine', name: 'Tabnine', category: 'coding', pricing: 'Free Basic Tier', url: 'https://www.tabnine.com', description: 'Context-aware AI code completion assistant supporting major IDEs with a strong privacy focus.', fallbackImg: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'replit-agent', name: 'Replit Agent', category: 'coding', pricing: 'Free Trial Tiers', url: 'https://replit.com', description: 'Build software projects from scratch in an online IDE with automated backend configuration.', fallbackImg: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'codeium', name: 'Codeium / Windsurf', category: 'coding', pricing: 'Free Individual Tier', url: 'https://codeium.com', description: 'Ultra-fast AI code autocomplete and chat extension for VS Code, JetBrains, and Vim.', fallbackImg: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'phind', name: 'Phind', category: 'coding', pricing: 'Free Search Tier', url: 'https://www.phind.com', description: 'Search engine optimized specifically for developers, providing verified code answers and technical explanations.', fallbackImg: 'https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?q=80&w=1200&auto=format&fit=crop' },
+
+      // 2. STUDENT / ASSIGNMENT (10 Tools)
+      { id: 'notebooklm', name: 'NotebookLM', category: 'student', pricing: '100% Free', url: 'https://notebooklm.google.com', description: 'Google AI notebook that converts your uploaded PDFs, slides, and notes into interactive study guides and audio discussions.', fallbackImg: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'chatgpt', name: 'ChatGPT (GPT-4o)', category: 'student', pricing: 'Free Plan', url: 'https://chatgpt.com', description: 'Versatile conversational AI for brainstorming, assignment outlines, step-by-step problem solving, and language translation.', fallbackImg: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'quillbot', name: 'QuillBot', category: 'student', pricing: 'Free Basic Tier', url: 'https://quillbot.com', description: 'Paraphrasing tool, grammar checker, and citation generator designed to polish academic writing.', fallbackImg: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'grammarly-ai', name: 'Grammarly AI', category: 'student', pricing: 'Free Core Tier', url: 'https://www.grammarly.com', description: 'Real-time writing assistant that improves sentence clarity, tone, spelling, and academic formatting.', fallbackImg: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'mathway', name: 'Mathway', category: 'student', pricing: 'Free Step Solutions', url: 'https://www.mathway.com', description: 'Instant mathematics problem solver covering basic algebra, trigonometry, calculus, and statistics.', fallbackImg: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'symbolab', name: 'Symbolab', category: 'student', pricing: 'Free Basic Access', url: 'https://www.symbolab.com', description: 'Advanced math solver providing step-by-step solutions for calculus, differential equations, and linear algebra.', fallbackImg: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'goblin-tools', name: 'Goblin.tools', category: 'student', pricing: '100% Free', url: 'https://goblin.tools', description: 'Micro-tools that break down complex study tasks into clear actionable checklists and estimate time required.', fallbackImg: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'mindgrasp', name: 'Mindgrasp', category: 'student', pricing: 'Free Trial Tier', url: 'https://mindgrasp.ai', description: 'Converts documents, recorded lectures, and YouTube videos into concise flashcards and quiz sets.', fallbackImg: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'tome-app', name: 'Tome', category: 'student', pricing: 'Free Starter Credits', url: 'https://tome.app', description: 'AI storytelling engine that transforms written project briefs into beautifully formatted presentation slides.', fallbackImg: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'scholarcy', name: 'Scholarcy', category: 'student', pricing: 'Free Summary Extension', url: 'https://www.scholarcy.com', description: 'Summary tool for academic research papers, highlighting key claims, methodology, and tables.', fallbackImg: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1200&auto=format&fit=crop' },
+
+      // 3. DESIGN & IMAGE (10 Tools)
+      { id: 'recraft-ai', name: 'Recraft AI', category: 'design', pricing: 'Free Daily Credits', url: 'https://www.recraft.ai', description: 'Generates editable vector graphics, icons, brand illustrations, and 3D renders on an infinite canvas.', fallbackImg: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'ideogram', name: 'Ideogram', category: 'design', pricing: 'Free Daily Credits', url: 'https://ideogram.ai', description: 'Image generator specializing in accurate typography, logos, text rendering, and poster graphics.', fallbackImg: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'canva-magic', name: 'Canva Magic Studio', category: 'design', pricing: 'Free Plan', url: 'https://www.canva.com', description: 'Comprehensive design suite equipped with AI image generation, automatic background removal, and smart layouts.', fallbackImg: 'https://images.unsplash.com/photo-1542744094-3a3121699569?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'clipdrop', name: 'Clipdrop by Stability', category: 'design', pricing: 'Free Basic Tools', url: 'https://clipdrop.co', description: 'Suite of visual tools to upscale images, remove unwanted objects, replace backgrounds, and relight photos.', fallbackImg: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'krea-ai', name: 'Krea AI', category: 'design', pricing: 'Free Real-time Generation', url: 'https://www.krea.ai', description: 'Real-time canvas visual generator that converts quick line drawings and prompts into high-resolution artwork.', fallbackImg: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'vectorizer-ai', name: 'Vectorizer.AI', category: 'design', pricing: 'Free Preview', url: 'https://vectorizer.ai', description: 'Converts raster images (PNGs, JPEGs) into clean vector graphics (SVG) with sharp lines.', fallbackImg: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'photoroom', name: 'PhotoRoom', category: 'design', pricing: 'Free Tier', url: 'https://www.photoroom.com', description: 'AI background remover and studio photo editor tailored for e-commerce products and profile shots.', fallbackImg: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'leonardo-ai', name: 'Leonardo.Ai', category: 'design', pricing: '150 Daily Tokens Free', url: 'https://leonardo.ai', description: 'Generates game assets, textures, concepts, and photorealistic art with custom fine-tuned models.', fallbackImg: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'adobe-firefly', name: 'Adobe Firefly', category: 'design', pricing: 'Free Monthly Credits', url: 'https://firefly.adobe.com', description: 'Commercially safe generative text-to-image and generative fill tools built right into the web browser.', fallbackImg: 'https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'remove-bg', name: 'Remove.bg', category: 'design', pricing: 'Free Web Tool', url: 'https://www.remove.bg', description: 'Instant, single-click automatic background removal tool for portraits, graphics, and product images.', fallbackImg: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?q=80&w=1200&auto=format&fit=crop' },
+
+      // 4. VIDEO & AUDIO (10 Tools)
+      { id: 'runwayml', name: 'Runway Gen-2 / Gen-3', category: 'video', pricing: 'Free Trial Credits', url: 'https://runwayml.com', description: 'Pioneering text-to-video and image-to-video AI suite for generating cinematic video clips.', fallbackImg: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'elevenlabs', name: 'ElevenLabs', category: 'video', pricing: 'Free Monthly Plan', url: 'https://elevenlabs.io', description: 'Ultra-realistic AI voice generator, text-to-speech converter, and voice cloning engine.', fallbackImg: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'luma-dream-machine', name: 'Luma Dream Machine', category: 'video', pricing: 'Free Monthly Generations', url: 'https://lumalabs.ai/dream-machine', description: 'High-speed video generator creating physically accurate 3D video shots from prompts and reference frames.', fallbackImg: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'capcut-ai', name: 'CapCut Web AI', category: 'video', pricing: 'Free Base Tools', url: 'https://www.capcut.com', description: 'All-in-one video editor featuring auto-captions, background removal, text-to-speech, and auto-reframing.', fallbackImg: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'descript', name: 'Descript', category: 'video', pricing: 'Free Starter Plan', url: 'https://www.descript.com', description: 'Edit video and audio podcasts by editing the text transcript, including automated filler word removal.', fallbackImg: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'pika-labs', name: 'Pika', category: 'video', pricing: 'Free Tier', url: 'https://pika.art', description: 'Idea-to-video generation platform capable of modifying specific regions of video with natural prompts.', fallbackImg: 'https://images.unsplash.com/photo-1518173946687-a4c8a383392e?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'veed-io', name: 'VEED.IO', category: 'video', pricing: 'Free Watermark Tier', url: 'https://www.veed.io', description: 'Online video editing suite with AI subtitle generation, noise removal, and eye-contact correction.', fallbackImg: 'https://images.unsplash.com/photo-1535016120720-40c646be5580?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'heygen', name: 'HeyGen', category: 'video', pricing: 'Free Trial Credit', url: 'https://www.heygen.com', description: 'Create studio-quality videos featuring realistic AI digital human avatars speaking customized text scripts.', fallbackImg: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'adobe-podcast', name: 'Adobe Podcast Enhance', category: 'video', pricing: '100% Free', url: 'https://podcast.adobe.com/enhance', description: 'Cleans up background noise and echo from voice recordings, making raw mic audio sound studio-recorded.', fallbackImg: 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'opus-clip', name: 'Opus Clip', category: 'video', pricing: 'Free Trial Credits', url: 'https://www.opus.pro', description: 'Repurposes long-form podcasts and YouTube videos into short viral TikToks, Shorts, and Reels.', fallbackImg: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1200&auto=format&fit=crop' },
+
+      // 5. PRODUCTIVITY (10 Tools)
+      { id: 'gamma-app', name: 'Gamma App', category: 'productivity', pricing: 'Free Starter Credits', url: 'https://gamma.app', description: 'Generates presentations, documents, and web pages from text prompts with interactive widgets.', fallbackImg: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'notion-ai', name: 'Notion AI', category: 'productivity', pricing: 'Free Workspace Integration', url: 'https://www.notion.so', description: 'Connected AI workspace assistant that drafts content, summarizes meeting notes, and automates databases.', fallbackImg: 'https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'clockwise', name: 'Clockwise', category: 'productivity', pricing: 'Free Core Plan', url: 'https://www.useclockwise.com', description: 'Intelligent calendar scheduling assistant that creates focus time blocks and resolves meeting conflicts.', fallbackImg: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'otter-ai', name: 'Otter.ai', category: 'productivity', pricing: 'Free Basic Plan', url: 'https://otter.ai', description: 'Automated meeting recorder and transcriber that extracts action items and summarizes Zoom or Meet calls.', fallbackImg: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'zapier-central', name: 'Zapier Central', category: 'productivity', pricing: 'Free Basic Tier', url: 'https://zapier.com', description: 'Build custom AI bots that talk to over 6,000+ business web apps to automate repetitive workflows.', fallbackImg: 'https://images.unsplash.com/photo-1518186285589-2f7649de83e0?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'make-com', name: 'Make.com AI', category: 'productivity', pricing: 'Free Tier Available', url: 'https://www.make.com', description: 'Visual automation platform connecting APIs and web services to build complex algorithmic workflows.', fallbackImg: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'taskade', name: 'Taskade AI', category: 'productivity', pricing: 'Free Forever Tier', url: 'https://www.taskade.com', description: 'Collaborative task lists, mind maps, and autonomous AI agents designed for team project management.', fallbackImg: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'reclaim-ai', name: 'Reclaim.ai', category: 'productivity', pricing: 'Free Plan', url: 'https://reclaim.ai', description: 'Smart calendar manager that automatically schedules habits, tasks, and 1:1 meetings dynamically.', fallbackImg: 'https://images.unsplash.com/photo-1435527173128-983b87201f4d?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'fireflies-ai', name: 'Fireflies.ai', category: 'productivity', pricing: 'Free Tier', url: 'https://fireflies.ai', description: 'AI voice assistant for online meetings that records, transcribes, and searches audio conversations.', fallbackImg: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'bardeen', name: 'Bardeen.ai', category: 'productivity', pricing: 'Free Starter Plan', url: 'https://www.bardeen.ai', description: 'Browser automation tool that scrapes data, triggers workflow actions, and syncs web data with one click.', fallbackImg: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop' },
+
+      // 6. WRITING & CONTENT (10 Tools)
+      { id: 'copy-ai', name: 'Copy.ai', category: 'writing', pricing: 'Free Plan', url: 'https://www.copy.ai', description: 'AI writing workspace for generating marketing emails, social posts, long-form articles, and sales copy.', fallbackImg: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'jasper-ai', name: 'Jasper AI', category: 'writing', pricing: 'Free Trial', url: 'https://www.jasper.ai', description: 'Enterprise copywriter tool trained on brand voice consistency for blog posts, ad campaigns, and landing pages.', fallbackImg: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'hemingway-ai', name: 'Hemingway Editor Plus', category: 'writing', pricing: 'Free Base Editor', url: 'https://hemingwayapp.com', description: 'Highlights complex sentences, passive voice, and readability issues to make your prose bold and clear.', fallbackImg: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'writesonic', name: 'Writesonic', category: 'writing', pricing: 'Free Monthly Words', url: 'https://writesonic.com', description: 'Generates factual, SEO-optimized articles based on real-time web search and current events.', fallbackImg: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'rytr', name: 'Rytr', category: 'writing', pricing: 'Free Plan (10k chars)', url: 'https://rytr.me', description: 'Lightweight AI writing assistant for fast email drafts, product descriptions, and blog ideas.', fallbackImg: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'deep-l', name: 'DeepL Translate', category: 'writing', pricing: 'Free Web Translation', url: 'https://www.deepl.com', description: 'Highly nuanced AI language translation tool providing natural phrasing across 30+ global languages.', fallbackImg: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'lex-page', name: 'Lex', category: 'writing', pricing: 'Free Base Access', url: 'https://lex.page', description: 'A modern word processor designed for writers, offering inline AI suggestions and feedback.', fallbackImg: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'hyperwrite', name: 'HyperWrite', category: 'writing', pricing: 'Free Tier', url: 'https://www.hyperwriteai.com', description: 'Personal AI writing assistant extension that autocompletes your sentences across web applications.', fallbackImg: 'https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'anyword', name: 'Anyword', category: 'writing', pricing: 'Free Trial', url: 'https://anyword.com', description: 'Performance copywriting platform that scores ad text and predicts audience engagement prior to launching.', fallbackImg: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'character-ai', name: 'Character.ai', category: 'writing', pricing: 'Free Access', url: 'https://character.ai', description: 'Conversational chat platform to interact with human-like AI characters for dialogue practice and creative writing.', fallbackImg: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200&auto=format&fit=crop' },
+
+      // 7. RESEARCH & DATA (10 Tools)
+      { id: 'perplexity-research', name: 'Perplexity AI', category: 'research', pricing: 'Free Search Engine', url: 'https://www.perplexity.ai', description: 'Live web research engine with inline domain citation, file analysis, and deep reasoning models.', fallbackImg: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'consensus-app', name: 'Consensus', category: 'research', pricing: 'Free Monthly Searches', url: 'https://consensus.app', description: 'AI search engine for science that extracts evidence-based answers directly from peer-reviewed research papers.', fallbackImg: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'elicit-org', name: 'Elicit', category: 'research', pricing: 'Free Basic Credits', url: 'https://elicit.com', description: 'Automates literature reviews by searching research papers, summarizing main takeaways, and extracting data tables.', fallbackImg: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'chatpdf', name: 'ChatPDF', category: 'research', pricing: 'Free (2 PDFs/day)', url: 'https://www.chatpdf.com', description: 'Upload any PDF document or research paper to extract key points, ask questions, and summarize chapters.', fallbackImg: 'https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'julius-ai', name: 'Julius AI', category: 'research', pricing: 'Free Data Queries', url: 'https://julius.ai', description: 'Data analyst assistant that cleans spreadsheets, performs statistical analysis, and generates data charts.', fallbackImg: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'scite-ai', name: 'scite.ai', category: 'research', pricing: 'Free Search Access', url: 'https://scite.ai', description: 'Smart citation search engine that shows how research papers cite each other with supporting context.', fallbackImg: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'humata-ai', name: 'Humata AI', category: 'research', pricing: 'Free Tier (60 pages)', url: 'https://www.humata.ai', description: 'Fast document QA engine to summarize long technical reports and synthesize multi-file insights.', fallbackImg: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'wolfram-alpha', name: 'WolframAlpha', category: 'research', pricing: 'Free Web Compute', url: 'https://www.wolframalpha.com', description: 'Computational intelligence engine providing expert-level answers in science, math, engineering, and data.', fallbackImg: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'semantic-scholar', name: 'Semantic Scholar', category: 'research', pricing: '100% Free', url: 'https://www.semanticscholar.org', description: 'AI-driven scientific literature search engine hosted by the Allen Institute for AI.', fallbackImg: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'research-rabbit', name: 'ResearchRabbit', category: 'research', pricing: '100% Free', url: 'https://www.researchrabbit.ai', description: 'Visual discovery tool for academic papers, mapping connection graphs between authors and literature.', fallbackImg: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1200&auto=format&fit=crop' },
+
+      // 8. MUSIC & SOUND (10 Tools)
+      { id: 'suno-ai', name: 'Suno AI', category: 'music', pricing: '50 Free Daily Credits', url: 'https://suno.com', description: 'Generates full-length original songs with vocals, lyrics, and instrumental arrangements from simple prompts.', fallbackImg: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'udio-music', name: 'Udio Music', category: 'music', pricing: 'Free Tier', url: 'https://www.udio.com', description: 'High-fidelity AI music generation platform across electronic, rock, pop, and classical genres.', fallbackImg: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'soundraw', name: 'Soundraw', category: 'music', pricing: 'Free Track Generation', url: 'https://soundraw.io', description: 'Customizable background music creator for video producers, podcasts, and game developers.', fallbackImg: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'mubert', name: 'Mubert', category: 'music', pricing: 'Free Personal Tier', url: 'https://mubert.com', description: 'Generative real-time streaming music generator for videos, apps, and background study ambience.', fallbackImg: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'lalal-ai', name: 'LALAL.AI', category: 'music', pricing: 'Free Preview Pack', url: 'https://www.lalal.ai', description: 'Vocal remover and stem splitter that extracts vocal tracks, drums, bass, and instruments cleanly.', fallbackImg: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'boomy', name: 'Boomy', category: 'music', pricing: 'Free Song Creation', url: 'https://boomy.com', description: 'Create and release original songs in seconds, with automated mastering and distribution options.', fallbackImg: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'bandlab-songstarter', name: 'BandLab Songstarter', category: 'music', pricing: '100% Free', url: 'https://www.bandlab.com', description: 'Generates musical beat ideas and chord progressions to kickstart music production in your browser.', fallbackImg: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'voicemod-ai', name: 'Voicemod AI', category: 'music', pricing: 'Free Base Voices', url: 'https://www.voicemod.net', description: 'Real-time AI voice changer and soundboard for Discord, gaming streams, and online calls.', fallbackImg: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'aiva-music', name: 'AIVA', category: 'music', pricing: 'Free Starter Plan', url: 'https://www.aiva.ai', description: 'Artificial Intelligence Virtual Artist composing soundtrack music for movies, games, and commercials.', fallbackImg: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'ripoff-audio', name: 'Moises.ai', category: 'music', pricing: 'Free Monthly Stems', url: 'https://moises.ai', description: 'Musician suite for pitch detection, audio speed control, and multi-track instrument isolation.', fallbackImg: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=1200&auto=format&fit=crop' },
+
+      // 9. MARKETING & SEO (10 Tools)
+      { id: 'surfer-seo', name: 'Surfer SEO', category: 'marketing', pricing: 'Free Keyword Extension', url: 'https://surferseo.com', description: 'Content optimization tool that analyzes top-ranking search results to guide keyword density and structure.', fallbackImg: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'simplified', name: 'Simplified', category: 'marketing', pricing: 'Free Plan', url: 'https://simplified.com', description: 'All-in-one app for graphic design, AI copywriting, social media scheduling, and short video generation.', fallbackImg: 'https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'predis-ai', name: 'Predis.ai', category: 'marketing', pricing: 'Free Starter Credits', url: 'https://predis.ai', description: 'Generates complete social media posts with visuals, captions, carousel decks, and hashtags.', fallbackImg: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'semrush-one2two', name: 'Semrush AI Tools', category: 'marketing', pricing: 'Free Account Features', url: 'https://www.semrush.com', description: 'Market research and SEO toolset to audit website traffic, discover keywords, and map competitors.', fallbackImg: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'answer-the-public', name: 'AnswerThePublic', category: 'marketing', pricing: 'Free Daily Searches', url: 'https://answerthepublic.com', description: 'Discovers search questions and autocomplete queries users type into search engines.', fallbackImg: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'brand24', name: 'Brand24 AI', category: 'marketing', pricing: 'Free Trial', url: 'https://brand24.com', description: 'AI social listening and sentiment analysis platform monitoring brand mentions across web and social media.', fallbackImg: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'buzzsumo', name: 'BuzzSumo', category: 'marketing', pricing: 'Free Tier', url: 'https://buzzsumo.com', description: 'Identifies viral content trends, high-performing headlines, and key industry influencers.', fallbackImg: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'adcreative-ai', name: 'AdCreative.ai', category: 'marketing', pricing: 'Free Trial', url: 'https://www.adcreative.ai', description: 'Generates high-converting ad banners and social media copy tuned for conversion rate optimization.', fallbackImg: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'tweethunter', name: 'TweetHunter', category: 'marketing', pricing: 'Free Preview Tools', url: 'https://tweethunter.io', description: 'X / Twitter growth platform offering tweet ideas, thread drafting, automated publishing, and analytics.', fallbackImg: 'https://images.unsplash.com/photo-1611605698335-8b1569810432?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'hubspot-ai', name: 'HubSpot AI Tools', category: 'marketing', pricing: 'Free CRM & Tools', url: 'https://www.hubspot.com', description: 'Free suite of AI content writers, email campaign generators, and customer management tools.', fallbackImg: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1200&auto=format&fit=crop' },
+
+      // 10. UTILITIES & DEVTOOLS (10 Tools)
+      { id: 'huggingface', name: 'Hugging Face', category: 'utilities', pricing: '100% Free Open Source', url: 'https://huggingface.co', description: 'The GitHub of AI. Explore, test, and host open-source AI models, datasets, and web apps.', fallbackImg: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'tinypng', name: 'TinyPNG AI', category: 'utilities', pricing: 'Free Web Compression', url: 'https://tinypng.com', description: 'Smart WebP, PNG, and JPEG image compression tool that shrinks file sizes without quality loss.', fallbackImg: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'excalibur-draw', name: 'Excalidraw AI', category: 'utilities', pricing: '100% Free', url: 'https://excalidraw.com', description: 'Hand-drawn virtual whiteboard with text-to-diagram AI generation features for system design.', fallbackImg: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'openrouter', name: 'OpenRouter', category: 'utilities', pricing: 'Free Model Access', url: 'https://openrouter.ai', description: 'Unified API gateway providing developers single-endpoint access to every major LLM.', fallbackImg: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'replicate', name: 'Replicate', category: 'utilities', pricing: 'Free Trial Credits', url: 'https://replicate.com', description: 'Run open-source machine learning models in the cloud via lightweight API endpoints.', fallbackImg: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'groq-cloud', name: 'Groq Cloud', category: 'utilities', pricing: 'Free Developer API', url: 'https://groq.com', description: 'Ultra-fast LPU inference engine rendering open models like Llama at lightning speed.', fallbackImg: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'ollama', name: 'Ollama', category: 'utilities', pricing: '100% Free Local Engine', url: 'https://ollama.com', description: 'Get up and running with Llama 3, Mistral, and other open LLMs locally on macOS, Linux, and Windows.', fallbackImg: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'diffchecker', name: 'Diffchecker AI', category: 'utilities', pricing: 'Free Web Tool', url: 'https://www.diffchecker.com', description: 'Diff tool to compare text, code, images, and PDFs to highlight line changes automatically.', fallbackImg: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'pinecone', name: 'Pinecone', category: 'utilities', pricing: 'Free Starter Plan', url: 'https://www.pinecone.io', description: 'Vector database infrastructure designed for fast similarity search and building RAG AI systems.', fallbackImg: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'langchain', name: 'LangChain', category: 'utilities', pricing: '100% Free Open Source', url: 'https://www.langchain.com', description: 'Development framework for building context-aware reasoning applications powered by LLMs.', fallbackImg: 'https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?q=80&w=1200&auto=format&fit=crop' }
+    ];
+
+    // Master Categories Config (Complete 10 Categories)
+    const CATEGORIES = [
+      { id: 'all', label: 'All Recommendations' },
+      { id: 'coding', label: 'Coding' },
+      { id: 'student', label: 'Student / Assignment' },
+      { id: 'design', label: 'Design & Image' },
+      { id: 'video', label: 'Video & Audio' },
+      { id: 'productivity', label: 'Productivity' },
+      { id: 'writing', label: 'Writing & Content' },
+      { id: 'research', label: 'Research & Data' },
+      { id: 'music', label: 'Music & Sound' },
+      { id: 'marketing', label: 'Marketing & SEO' },
+      { id: 'utilities', label: 'Utilities & Dev' }
+    ];
+
+    let activeCategory = 'all';
+
+    // Application Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCategoryButtons();
+      renderStream();
+    });
+
+    // Render Filter Buttons Dynamically
+    function renderCategoryButtons() {
+      const container = document.getElementById('categoryFilters');
+      container.innerHTML = CATEGORIES.map(cat => {
+        const isActive = cat.id === activeCategory;
+        const activeClasses = 'bg-slate-900 text-white font-medium shadow-sm';
+        const inactiveClasses = 'bg-slate-100 text-slate-600 hover:bg-slate-200';
+        return `
+          <button 
+            onclick="setCategory('${cat.id}')" 
+            class="px-3 py-1.5 rounded-md transition whitespace-nowrap shrink-0 ${isActive ? activeClasses : inactiveClasses}">
+            ${cat.label}
+          </button>
+        `;
+      }).join('');
+    }
+
+    // Category Change Handler
+    function setCategory(catId) {
+      activeCategory = catId;
+      renderCategoryButtons();
+      renderStream();
+    }
+
+    // Search Change Handler
+    function handleSearch() {
+      renderStream();
+    }
+
+    // Reset Filters Helper
+    function resetFilters() {
+      document.getElementById('searchInput').value = '';
+      activeCategory = 'all';
+      renderCategoryButtons();
+      renderStream();
+    }
+
+    // Primary Dynamic Stream Render Engine
+    function renderStream() {
+      const container = document.getElementById('toolsStream');
+      const emptyState = document.getElementById('emptyState');
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+
+      // Filter items according to category and search term
+      const filtered = AI_TOOLS.filter(tool => {
+        const matchesCategory = activeCategory === 'all' || tool.category === activeCategory;
+        const matchesQuery = !query || 
+          tool.name.toLowerCase().includes(query) || 
+          tool.description.toLowerCase().includes(query) ||
+          tool.category.toLowerCase().includes(query);
+        return matchesCategory && matchesQuery;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      // Generate Pure Editorial Stream HTML
+      container.innerHTML = filtered.map((tool) => {
+        const primaryApi = `https://s0.wp.com/mshots/v1/${encodeURIComponent(tool.url)}?w=1200&h=675`;
+        const fallbackApi = `https://api.microlink.io/?url=${encodeURIComponent(tool.url)}&screenshot=true&embed=screenshot.url`;
+
+        return `
+          <article class="tool-item pt-10 sm:pt-14 first:pt-0 group lg:grid lg:grid-cols-[1fr_420px] lg:gap-8 lg:items-center">
+            <div>
+              <!-- Header Row -->
+              <div class="flex items-baseline justify-between mb-2.5 sm:mb-3 gap-3 flex-wrap">
+                <h2 class="text-xl sm:text-3xl font-bold tracking-tight text-slate-900 group-hover:text-blue-600 transition">
+                  <a href="${tool.url}" target="_blank" rel="noopener" class="font-sans">
+                    ${tool.name}
+                  </a>
+                </h2>
+                <span class="text-[11px] sm:text-xs font-mono uppercase bg-slate-100 text-slate-600 px-2.5 py-0.5 sm:py-1 rounded">
+                  ${tool.pricing}
+                </span>
+              </div>
+
+              <!-- Description -->
+              <p class="text-slate-600 text-sm sm:text-lg leading-relaxed mb-4 sm:mb-6 max-w-2xl font-sans">
+                ${tool.description}
+              </p>
+
+              <!-- Action Link Bar -->
+              <div class="flex items-center gap-5 sm:gap-6 text-xs sm:text-sm font-medium">
+                <a 
+                  href="${tool.url}" 
+                  target="_blank" 
+                  rel="noopener"
+                  class="inline-flex items-center gap-1.5 text-slate-900 hover:text-blue-600 underline underline-offset-4 transition">
+                  <span>Visit ${tool.name}</span>
+                  <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                  </svg>
+                </a>
+                <button 
+                  onclick="shareOnWhatsApp('${escapeJS(tool.name)}', '${escapeJS(tool.description)}', '${tool.url}')" 
+                  class="inline-flex items-center gap-1.5 text-slate-500 hover:text-emerald-600 transition">
+                  <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" viewBox="0 0 24 24">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+                  </svg>
+                  <span>Share via WhatsApp</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Wide High-Resolution Responsive Screenshot Banner -->
+            <div class="w-full h-44 sm:h-64 md:h-80 lg:h-[236px] overflow-hidden mb-4 sm:mb-6 lg:mb-0 relative">
+              <img 
+                src="${primaryApi}" 
+                onerror="this.onerror=null; this.src='${fallbackApi}'; this.onerror=()=>this.src='${tool.fallbackImg}';"
+                alt="${tool.name} live landing page preview" 
+                class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-[1.01]"
+                loading="lazy"
+              />
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // Helper to safely escape string quotes for inline JS function triggers
+    function escapeJS(str) {
+      return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+    }
+
+    // WhatsApp Direct Share Trigger
+    function shareOnWhatsApp(name, desc, url) {
+      const text = `Check out ${name}: ${desc}\nLink: ${url}`;
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    }
+  </script>
+</body>
+</html>
